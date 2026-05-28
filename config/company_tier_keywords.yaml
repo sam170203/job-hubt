@@ -1,0 +1,7 @@
+startup_signals: ["startup", "early-stage", "early stage", "seed", "pre-seed",
+                  "series a", "series b", "series c", "yc", "y combinator",
+                  "founding engineer", "founding team", "small team"]
+scaleup_signals: ["series d", "series e", "growth stage", "unicorn",
+                  "post-ipo", "well-funded"]
+mnc_signals:    ["fortune 500", "fortune 100", "multinational", "mnc",
+                 "global team", "30,000 employees", "50,000 employees"]

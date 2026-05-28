@@ -1,0 +1,13 @@
+india_states:
+  Delhi:        [delhi, new delhi, dlf]
+  Karnataka:    [bangalore, bengaluru, karnataka, mysore]
+  Maharashtra:  [mumbai, pune, nagpur, maharashtra]
+  Tamil Nadu:   [chennai, madras, coimbatore, tamil nadu]
+  Telangana:    [hyderabad, telangana, secunderabad]
+  Haryana:      [gurgaon, gurugram, haryana, faridabad]
+  Uttar Pradesh: [noida, ghaziabad, lucknow, uttar pradesh]
+  West Bengal:  [kolkata, calcutta, west bengal]
+  Gujarat:      [ahmedabad, surat, gandhinagar, gujarat]
+  Kerala:       [kochi, trivandrum, kerala, ernakulam]
+  Rajasthan:    [jaipur, rajasthan, udaipur]
+  Punjab:       [chandigarh, punjab, mohali]

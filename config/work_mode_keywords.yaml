@@ -1,0 +1,4 @@
+work_mode:
+  remote:  ["remote", "wfh", "work from home", "fully remote", "100% remote", "anywhere"]
+  hybrid:  ["hybrid", "flex", "flexible", "2 days in office", "3 days in office"]
+  onsite:  ["onsite", "on-site", "in-office", "in office", "no remote"]

@@ -1,0 +1,4 @@
+my_skills:
+  strong:    [python, pytorch, langchain, rag, llm, fastapi, flask]
+  moderate:  [cpp, typescript, react, aws, docker]
+  learning:  [kubernetes, rust, go, gcp]
