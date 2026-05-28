@@ -24,6 +24,16 @@ scripts/run_scrapers.sh
 uv run pytest
 ```
 
+## Install the `job-hunt` terminal command
+
+```bash
+scripts/install_command.sh
+source ~/.zshrc
+job-hunt
+```
+
+This adds an alias to `~/.zshrc` so you can launch the dashboard from anywhere with `job-hunt`.
+
 ## Schedule the daily scrape
 
 Add this to your crontab (`crontab -e`):

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Launch the job-hunt dashboard and open the browser.
+
+set -euo pipefail
+
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$PROJECT_DIR"
+
+UV="$(command -v uv || echo /opt/homebrew/bin/uv)"
+
+# Start Streamlit in background, capture PID, open browser, then attach to logs.
+LOG=/tmp/job-hunt-streamlit.log
+"$UV" run streamlit run src/job_hunt/dashboard/app.py \
+  --server.headless true --server.port 8501 > "$LOG" 2>&1 &
+PID=$!
+
+# Wait briefly for boot
+for i in $(seq 1 15); do
+  if curl -s -o /dev/null http://localhost:8501/; then
+    break
+  fi
+  sleep 0.5
+done
+
+echo "job-hunt running (PID $PID, log: $LOG)"
+echo "Opening http://localhost:8501 ..."
+open http://localhost:8501 || true
+
+# Keep the script attached so Ctrl-C stops Streamlit too.
+trap "kill $PID 2>/dev/null; exit 0" INT TERM
+wait $PID
