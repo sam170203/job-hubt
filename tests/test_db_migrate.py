@@ -1,7 +1,7 @@
 from sqlalchemy import inspect, text
 
 from job_hunt import db
-from job_hunt.db_migrate import MIGRATIONS, run_migrations
+from job_hunt.db_migrate import MIGRATIONS
 
 
 def test_migrations_create_new_columns(tmp_data_dir):
@@ -10,8 +10,7 @@ def test_migrations_create_new_columns(tmp_data_dir):
     eng = db.get_engine()
     insp = inspect(eng)
     cols = {c["name"] for c in insp.get_columns("jobs")}
-    assert {"work_mode", "country", "india_state", "company_tier",
-            "match_score", "hidden"} <= cols
+    assert {"work_mode", "country", "india_state", "company_tier", "match_score", "hidden"} <= cols
 
 
 def test_migrations_create_new_tables(tmp_data_dir):

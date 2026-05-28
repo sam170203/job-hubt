@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from functools import lru_cache
+from functools import cache, lru_cache
 from pathlib import Path
 
 import yaml
@@ -55,7 +55,7 @@ def enrich_tags(title: str, jd_text: str | None) -> EnrichedTags:
 # --- v2 enrichers (work_mode, geography, company_tier, match_score) ---
 
 
-@lru_cache(maxsize=None)
+@cache
 def _load_yaml(name: str) -> dict:
     path = PROJECT_ROOT / "config" / name
     with path.open() as f:

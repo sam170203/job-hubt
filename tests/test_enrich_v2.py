@@ -8,7 +8,10 @@ from job_hunt.pipeline.enrich import (
 
 
 def test_work_mode_remote():
-    assert classify_work_mode("Senior ML Engineer (Remote)", "100% remote, work from anywhere") == "remote"
+    assert (
+        classify_work_mode("Senior ML Engineer (Remote)", "100% remote, work from anywhere")
+        == "remote"
+    )
 
 
 def test_work_mode_hybrid():

@@ -1,7 +1,7 @@
 """All DB read/write helpers used by the Streamlit dashboard."""
+
 from __future__ import annotations
 
-import json
 from datetime import datetime, timedelta
 from typing import Any
 
@@ -11,8 +11,15 @@ from job_hunt.db import session_scope
 from job_hunt.models import Application, CompanyBlocklist, Job, SavedView
 
 VALID_STATUSES = {
-    "new", "shortlisted", "applied", "replied",
-    "rejected", "ghosted", "interviewing", "offer", "skipped",
+    "new",
+    "shortlisted",
+    "applied",
+    "replied",
+    "rejected",
+    "ghosted",
+    "interviewing",
+    "offer",
+    "skipped",
 }
 
 
@@ -99,9 +106,13 @@ def apply_to_job(
 def list_applied_jobs() -> list[Job]:
     with session_scope() as s:
         rows = s.scalars(
-            select(Job).where(Job.status.in_(
-                ["applied", "replied", "interviewing", "rejected", "ghosted", "offer"]
-            )).order_by(Job.id.desc())
+            select(Job)
+            .where(
+                Job.status.in_(
+                    ["applied", "replied", "interviewing", "rejected", "ghosted", "offer"]
+                )
+            )
+            .order_by(Job.id.desc())
         ).all()
         for r in rows:
             _ = r.applications  # eagerly hydrate to avoid detached access
@@ -111,18 +122,18 @@ def list_applied_jobs() -> list[Job]:
 
 def blocklist_company(company_name: str, reason: str | None = None) -> None:
     with session_scope() as s:
-        existing = s.scalar(select(CompanyBlocklist).where(
-            CompanyBlocklist.company_name == company_name
-        ))
-        if existing is None:
-            s.add(CompanyBlocklist(
-                company_name=company_name,
-                reason=reason,
-                created_at=datetime.utcnow(),
-            ))
-        s.execute(
-            update(Job).where(Job.company == company_name).values(hidden=True)
+        existing = s.scalar(
+            select(CompanyBlocklist).where(CompanyBlocklist.company_name == company_name)
         )
+        if existing is None:
+            s.add(
+                CompanyBlocklist(
+                    company_name=company_name,
+                    reason=reason,
+                    created_at=datetime.utcnow(),
+                )
+            )
+        s.execute(update(Job).where(Job.company == company_name).values(hidden=True))
 
 
 def list_blocklist() -> list[CompanyBlocklist]:
@@ -152,8 +163,10 @@ def list_saved_views() -> list[SavedView]:
 
 def distinct_filter_values() -> dict[str, list[str]]:
     with session_scope() as s:
+
         def _d(col):
             return sorted({x for (x,) in s.execute(select(col).distinct()) if x})
+
         return {
             "sources": _d(Job.source),
             "role_tags": _d(Job.role_tag),

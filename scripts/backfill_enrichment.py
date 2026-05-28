@@ -2,6 +2,7 @@
 
 Idempotent — only writes when at least one new column needs updating.
 """
+
 from __future__ import annotations
 
 from sqlalchemy import select

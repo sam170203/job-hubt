@@ -9,10 +9,11 @@ Constraints:
 - Idempotent at the runner level — re-running init_db is safe.
 - No down-migrations in v1.
 """
+
 from __future__ import annotations
 
+from collections.abc import Callable
 from datetime import datetime
-from typing import Callable
 
 from sqlalchemy import inspect, text
 from sqlalchemy.engine import Connection, Engine
@@ -21,12 +22,14 @@ Migration = tuple[int, str, Callable[[Connection], None]]
 
 
 def _ensure_schema_migrations(conn: Connection) -> None:
-    conn.execute(text(
-        "CREATE TABLE IF NOT EXISTS schema_migrations ("
-        "  version INTEGER PRIMARY KEY,"
-        "  applied_at DATETIME NOT NULL"
-        ")"
-    ))
+    conn.execute(
+        text(
+            "CREATE TABLE IF NOT EXISTS schema_migrations ("
+            "  version INTEGER PRIMARY KEY,"
+            "  applied_at DATETIME NOT NULL"
+            ")"
+        )
+    )
 
 
 def _applied(conn: Connection) -> set[int]:
@@ -50,6 +53,7 @@ def _table_exists(conn: Connection, table: str) -> bool:
 
 # --- Migrations ---
 
+
 def m1_add_jobs_columns(conn: Connection) -> None:
     _add_col_if_missing(conn, "jobs", "work_mode", "TEXT")
     _add_col_if_missing(conn, "jobs", "country", "TEXT")
@@ -60,27 +64,34 @@ def m1_add_jobs_columns(conn: Connection) -> None:
 
 
 def m2_create_aux_tables(conn: Connection) -> None:
-    conn.execute(text(
-        "CREATE TABLE IF NOT EXISTS company_blocklist ("
-        "  id INTEGER PRIMARY KEY,"
-        "  company_name TEXT UNIQUE NOT NULL,"
-        "  reason TEXT,"
-        "  created_at DATETIME NOT NULL"
-        ")"
-    ))
-    conn.execute(text(
-        "CREATE TABLE IF NOT EXISTS saved_views ("
-        "  id INTEGER PRIMARY KEY,"
-        "  name TEXT UNIQUE NOT NULL,"
-        "  filters_json TEXT NOT NULL,"
-        "  created_at DATETIME NOT NULL"
-        ")"
-    ))
+    conn.execute(
+        text(
+            "CREATE TABLE IF NOT EXISTS company_blocklist ("
+            "  id INTEGER PRIMARY KEY,"
+            "  company_name TEXT UNIQUE NOT NULL,"
+            "  reason TEXT,"
+            "  created_at DATETIME NOT NULL"
+            ")"
+        )
+    )
+    conn.execute(
+        text(
+            "CREATE TABLE IF NOT EXISTS saved_views ("
+            "  id INTEGER PRIMARY KEY,"
+            "  name TEXT UNIQUE NOT NULL,"
+            "  filters_json TEXT NOT NULL,"
+            "  created_at DATETIME NOT NULL"
+            ")"
+        )
+    )
 
 
 MIGRATIONS: list[Migration] = [
-    (1, "add jobs columns: work_mode, country, india_state, company_tier, match_score, hidden",
-     m1_add_jobs_columns),
+    (
+        1,
+        "add jobs columns: work_mode, country, india_state, company_tier, match_score, hidden",
+        m1_add_jobs_columns,
+    ),
     (2, "create company_blocklist + saved_views tables", m2_create_aux_tables),
 ]
 
@@ -89,7 +100,7 @@ def run_migrations(engine: Engine) -> None:
     with engine.begin() as conn:
         _ensure_schema_migrations(conn)
         applied = _applied(conn)
-        for version, desc, fn in MIGRATIONS:
+        for version, _desc, fn in MIGRATIONS:
             if version in applied:
                 continue
             fn(conn)

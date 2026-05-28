@@ -6,10 +6,11 @@ Pages:
 - This file → Inbox
 - pages/2_Applied.py → Applied
 """
+
 from __future__ import annotations
 
-import yaml
 import streamlit as st
+import yaml
 
 from job_hunt.dashboard.queries import (
     apply_to_job,
@@ -64,48 +65,59 @@ with st.sidebar:
     st.header("Filters")
     filters = distinct_filter_values()
 
-    sel_work = st.multiselect("Work mode", filters["work_modes"],
-                              default=loaded.get("work_modes", []))
-    geo_choice = st.radio("Geography", ["Either", "India", "International"],
-                          index=["Either", "India", "International"].index(
-                              loaded.get("geo_choice", "Either")))
+    sel_work = st.multiselect(
+        "Work mode", filters["work_modes"], default=loaded.get("work_modes", [])
+    )
+    geo_choice = st.radio(
+        "Geography",
+        ["Either", "India", "International"],
+        index=["Either", "India", "International"].index(loaded.get("geo_choice", "Either")),
+    )
     if geo_choice == "India":
         india_states = [s for s in filters["india_states"]]
-        sel_states = st.multiselect("India state", india_states,
-                                    default=loaded.get("india_states", []))
+        sel_states = st.multiselect(
+            "India state", india_states, default=loaded.get("india_states", [])
+        )
     else:
         sel_states = []
-    sel_tiers = st.multiselect("Company tier", filters["company_tiers"],
-                               default=loaded.get("company_tiers", []))
-    sel_skills = st.multiselect("Required skill (any of)", _my_skills(),
-                                default=loaded.get("required_skills", []))
-    min_score = st.slider("Min match score", 0.0, 1.0,
-                          loaded.get("min_match_score", 0.0), step=0.05)
+    sel_tiers = st.multiselect(
+        "Company tier", filters["company_tiers"], default=loaded.get("company_tiers", [])
+    )
+    sel_skills = st.multiselect(
+        "Required skill (any of)", _my_skills(), default=loaded.get("required_skills", [])
+    )
+    min_score = st.slider(
+        "Min match score", 0.0, 1.0, loaded.get("min_match_score", 0.0), step=0.05
+    )
 
     st.divider()
-    sel_sources = st.multiselect("Source", filters["sources"],
-                                 default=loaded.get("sources", []))
-    sel_roles = st.multiselect("Role tag", filters["role_tags"],
-                               default=loaded.get("role_tags", []))
-    sel_seniority = st.multiselect("Seniority", filters["seniority_tags"],
-                                   default=loaded.get("seniority_tags", []))
+    sel_sources = st.multiselect("Source", filters["sources"], default=loaded.get("sources", []))
+    sel_roles = st.multiselect(
+        "Role tag", filters["role_tags"], default=loaded.get("role_tags", [])
+    )
+    sel_seniority = st.multiselect(
+        "Seniority", filters["seniority_tags"], default=loaded.get("seniority_tags", [])
+    )
     days = st.slider("Within (days)", 1, 30, loaded.get("within_days", 7))
 
     st.divider()
     new_view_name = st.text_input("Save current filters as…")
     if st.button("Save view", disabled=not new_view_name.strip()):
-        save_view(new_view_name.strip(), {
-            "work_modes": sel_work,
-            "geo_choice": geo_choice,
-            "india_states": sel_states,
-            "company_tiers": sel_tiers,
-            "required_skills": sel_skills,
-            "min_match_score": min_score,
-            "sources": sel_sources,
-            "role_tags": sel_roles,
-            "seniority_tags": sel_seniority,
-            "within_days": days,
-        })
+        save_view(
+            new_view_name.strip(),
+            {
+                "work_modes": sel_work,
+                "geo_choice": geo_choice,
+                "india_states": sel_states,
+                "company_tiers": sel_tiers,
+                "required_skills": sel_skills,
+                "min_match_score": min_score,
+                "sources": sel_sources,
+                "role_tags": sel_roles,
+                "seniority_tags": sel_seniority,
+                "within_days": days,
+            },
+        )
         st.success(f"Saved '{new_view_name.strip()}'")
         st.rerun()
 
@@ -137,8 +149,12 @@ for j in jobs:
             score_badge = f" `match {j.match_score:.0%}`" if j.match_score is not None else ""
             st.markdown(f"**{j.company}** — {j.title}{score_badge}")
             meta_parts = [
-                j.location, j.role_tag, j.seniority_tag,
-                j.work_mode, j.company_tier, j.source,
+                j.location,
+                j.role_tag,
+                j.seniority_tag,
+                j.work_mode,
+                j.company_tier,
+                j.source,
             ]
             meta = " · ".join(p for p in meta_parts if p)
             st.caption(meta)

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from job_hunt import db
 from job_hunt.dashboard.queries import apply_to_job, list_applied_jobs
@@ -6,8 +6,9 @@ from job_hunt.models import Job
 
 
 def _seed(s, **kw):
-    defaults = dict(source="hn", company="A", title="T", url="u",
-                    scraped_at=datetime.utcnow(), status="new")
+    defaults = dict(
+        source="hn", company="A", title="T", url="u", scraped_at=datetime.utcnow(), status="new"
+    )
     defaults.update(kw)
     j = Job(**defaults)
     s.add(j)

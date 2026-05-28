@@ -1,23 +1,21 @@
 from datetime import datetime, timedelta
 
-import pytest
-
 from job_hunt import db
 from job_hunt.dashboard.queries import (
     apply_to_job,
     blocklist_company,
     get_inbox_jobs,
     list_applied_jobs,
-    list_blocklist,
     list_saved_views,
     save_view,
 )
-from job_hunt.models import Application, CompanyBlocklist, Job, SavedView
+from job_hunt.models import Application, CompanyBlocklist, Job
 
 
 def _seed(s, **kw):
-    defaults = dict(source="hn", company="A", title="T", url="u",
-                    scraped_at=datetime.utcnow(), status="new")
+    defaults = dict(
+        source="hn", company="A", title="T", url="u", scraped_at=datetime.utcnow(), status="new"
+    )
     defaults.update(kw)
     j = Job(**defaults)
     s.add(j)
@@ -102,8 +100,7 @@ def test_inbox_default_sort_match_then_date(tmp_data_dir):
     now = datetime.utcnow()
     with db.session_scope() as s:
         _seed(s, external_id="1", url="u1", match_score=0.2, scraped_at=now)
-        _seed(s, external_id="2", url="u2", match_score=0.9,
-              scraped_at=now - timedelta(hours=1))
+        _seed(s, external_id="2", url="u2", match_score=0.9, scraped_at=now - timedelta(hours=1))
     rows = get_inbox_jobs()
     assert rows[0].external_id == "2"
 
@@ -158,6 +155,9 @@ def test_list_applied_returns_joined(tmp_data_dir):
 def test_saved_views_roundtrip(tmp_data_dir):
     db.reset_engine_for_testing()
     db.init_db()
-    save_view("ML India Remote", {"role_tags": ["ml"], "countries": ["India"], "work_modes": ["remote"]})
+    save_view(
+        "ML India Remote",
+        {"role_tags": ["ml"], "countries": ["India"], "work_modes": ["remote"]},
+    )
     views = list_saved_views()
     assert any(v.name == "ML India Remote" for v in views)

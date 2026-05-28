@@ -1,4 +1,5 @@
 """Applied page — what you've applied to, with follow-up flagging + CSV export."""
+
 from __future__ import annotations
 
 import csv
@@ -36,19 +37,32 @@ def _days_since(d):
 # CSV export
 csv_buffer = io.StringIO()
 writer = csv.writer(csv_buffer)
-writer.writerow(["company", "title", "applied_at", "resume_variant", "channel",
-                 "status", "days_since_apply", "url"])
+writer.writerow(
+    [
+        "company",
+        "title",
+        "applied_at",
+        "resume_variant",
+        "channel",
+        "status",
+        "days_since_apply",
+        "url",
+    ]
+)
 for j in jobs:
     a = _latest_apply(j)
-    writer.writerow([
-        j.company, j.title,
-        a.applied_at.isoformat() if a else "",
-        a.resume_variant if a else "",
-        a.channel if a else "",
-        j.status,
-        _days_since(a.applied_at if a else None),
-        j.url,
-    ])
+    writer.writerow(
+        [
+            j.company,
+            j.title,
+            a.applied_at.isoformat() if a else "",
+            a.resume_variant if a else "",
+            a.channel if a else "",
+            j.status,
+            _days_since(a.applied_at if a else None),
+            j.url,
+        ]
+    )
 st.download_button(
     "Download CSV",
     csv_buffer.getvalue(),
@@ -60,7 +74,12 @@ for j in jobs:
     a = _latest_apply(j)
     days = _days_since(a.applied_at if a else None)
     needs_followup = j.status == "applied" and days is not None and days >= FOLLOW_UP_DAYS
-    border_color = "🔴" if needs_followup else ("🟢" if j.status in {"offer", "interviewing"} else "⚪")
+    if needs_followup:
+        border_color = "🔴"
+    elif j.status in {"offer", "interviewing"}:
+        border_color = "🟢"
+    else:
+        border_color = "⚪"
 
     with st.container(border=True):
         cols = st.columns([4, 1])
@@ -87,7 +106,6 @@ for j in jobs:
                 index=STATUS_OPTIONS.index(j.status) if j.status in STATUS_OPTIONS else 0,
                 key=f"st_{j.id}",
             )
-            if new_status != j.status:
-                if st.button("Update", key=f"upd_{j.id}"):
-                    set_job_status(j.id, new_status)
-                    st.rerun()
+            if new_status != j.status and st.button("Update", key=f"upd_{j.id}"):
+                set_job_status(j.id, new_status)
+                st.rerun()
