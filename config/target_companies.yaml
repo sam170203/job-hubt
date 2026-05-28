@@ -1,6 +1,31 @@
-# Populated in Plan 2 when careers-pages scraper lands.
-# Schema:
-# - name: Razorpay
-#   careers_url: https://razorpay.com/jobs
-#   adapter: razorpay   # matches a function in scrapers.careers_pages
-companies: []
+companies:
+  # Greenhouse — endpoint pattern: https://boards-api.greenhouse.io/v1/boards/<slug>/jobs
+  - { name: "CRED",         ats: greenhouse, slug: cred }
+  - { name: "Zepto",        ats: greenhouse, slug: zeptonow }
+  - { name: "Postman",      ats: greenhouse, slug: postman }
+  - { name: "Sprinklr",     ats: greenhouse, slug: sprinklr }
+  - { name: "Hasura",       ats: greenhouse, slug: hasura }
+  - { name: "Chargebee",    ats: greenhouse, slug: chargebee }
+  - { name: "Freshworks",   ats: greenhouse, slug: freshworks }
+  - { name: "PhonePe",      ats: greenhouse, slug: phonepe }
+  - { name: "Meesho",       ats: greenhouse, slug: meesho }
+  - { name: "Acko",         ats: greenhouse, slug: acko }
+  - { name: "Razorpay",     ats: greenhouse, slug: razorpay }
+  - { name: "Stripe",       ats: greenhouse, slug: stripe }
+  - { name: "Notion",       ats: greenhouse, slug: notion }
+  - { name: "Anthropic",    ats: greenhouse, slug: anthropic }
+  - { name: "OpenAI",       ats: greenhouse, slug: openai }
+  - { name: "Scale AI",     ats: greenhouse, slug: scaleai }
+  - { name: "Databricks",   ats: greenhouse, slug: databricks }
+  - { name: "Figma",        ats: greenhouse, slug: figma }
+  - { name: "Vercel",       ats: greenhouse, slug: vercel }
+
+  # Lever — endpoint pattern: https://api.lever.co/v0/postings/<slug>?mode=json
+  - { name: "Atlan",        ats: lever, slug: atlan }
+  - { name: "Innovaccer",   ats: lever, slug: innovaccer }
+  - { name: "BrowserStack", ats: lever, slug: browserstack }
+  - { name: "Spinny",       ats: lever, slug: spinny }
+  - { name: "Mindtickle",   ats: lever, slug: mindtickle }
+  - { name: "Plaid",        ats: lever, slug: plaid }
+  - { name: "Discord",      ats: lever, slug: discord }
+  - { name: "Brex",         ats: lever, slug: brex }
