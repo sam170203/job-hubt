@@ -30,6 +30,10 @@ def test_pipeline_promotes_new_job(tmp_data_dir):
         assert len(jobs) == 1
         assert jobs[0].company == "Acme"
         assert jobs[0].role_tag == "ml"
+        assert jobs[0].work_mode in {"remote", "hybrid", "onsite", "unknown"}
+        assert jobs[0].country is not None  # Some country (or "International (unclear)") always set
+        assert jobs[0].company_tier in {"startup", "scaleup", "mnc", "unknown"}
+        assert jobs[0].match_score is not None and 0.0 <= jobs[0].match_score <= 1.0
         staging = s.query(StagingRaw).one()
         assert staging.promoted is True
 

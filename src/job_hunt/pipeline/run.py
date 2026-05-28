@@ -11,7 +11,14 @@ from sqlalchemy import select
 from job_hunt.db import session_scope
 from job_hunt.models import Job, StagingRaw
 from job_hunt.pipeline.dedupe import find_duplicate
-from job_hunt.pipeline.enrich import enrich_tags
+from job_hunt.pipeline.enrich import (
+    classify_company_tier,
+    classify_work_mode,
+    compute_match_score,
+    enrich_tags,
+    extract_country_and_state,
+    load_my_skills,
+)
 from job_hunt.pipeline.normalize import NormalizedJob, normalize_hn_payload
 
 log = logging.getLogger(__name__)
@@ -52,6 +59,11 @@ def run_pipeline() -> PipelineStats:
                 stats.duplicates += 1
             else:
                 tags = enrich_tags(title=norm.title, jd_text=norm.jd_text)
+                my_skills = load_my_skills()
+                work_mode = classify_work_mode(norm.title, norm.jd_text)
+                country, india_state = extract_country_and_state(norm.location)
+                company_tier = classify_company_tier(norm.company, norm.jd_text)
+                match_score = compute_match_score(tags.tech_tags, my_skills)
                 job = Job(
                     source=norm.source,
                     external_id=norm.external_id,
@@ -65,6 +77,11 @@ def run_pipeline() -> PipelineStats:
                     role_tag=tags.role_tag,
                     seniority_tag=tags.seniority_tag,
                     tech_tags=tags.tech_tags or None,
+                    work_mode=work_mode,
+                    country=country,
+                    india_state=india_state,
+                    company_tier=company_tier,
+                    match_score=match_score,
                 )
                 s.add(job)
                 stats.promoted += 1
