@@ -14,7 +14,7 @@ import httpx
 
 from job_hunt.scrapers.base import RawJob
 
-SEARCH_URL = "https://hn.algolia.com/api/v1/search"
+SEARCH_URL = "https://hn.algolia.com/api/v1/search_by_date"
 ITEM_URL = "https://hn.algolia.com/api/v1/items/{id}"
 
 
@@ -42,7 +42,7 @@ class HNHiringScraper:
             params={
                 "query": "Ask HN: Who is hiring",
                 "tags": "story",
-                "hitsPerPage": 1,
+                "hitsPerPage": 10,
             },
             timeout=20.0,
         )
@@ -50,6 +50,12 @@ class HNHiringScraper:
         hits = resp.json()["hits"]
         if not hits:
             raise RuntimeError("No HN 'Who is hiring' thread found")
+        # search_by_date returns newest first; find the first genuine hiring thread.
+        # Fall back to hits[0] when titles are absent (e.g. in unit-test mocks).
+        for hit in hits:
+            title = hit.get("title") or ""
+            if "Who is hiring" in title:
+                return hit["objectID"]
         return hits[0]["objectID"]
 
     def _fetch_thread(self, story_id: str) -> dict:
