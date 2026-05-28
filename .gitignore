@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# uv
+.python-version
+
+# Data + secrets
+data/*.db
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm
+data/.gmail_token.json
+data/cron.log
+data/reports/
+data/resumes/
+.env
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
