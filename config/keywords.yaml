@@ -1,0 +1,39 @@
+# Each section maps a tag → list of case-insensitive substrings to match in title + jd_text.
+# First match wins for role_tag and seniority_tag. tech_tags collects all matches.
+
+role_tag:
+  ml: ["ml", "machine learning", "ml engineer", "applied scientist", "ai engineer",
+       "deep learning", "llm engineer", "research engineer", "mlops"]
+  ai: ["genai", "generative ai", "ai/ml", "foundation model", "rag engineer"]
+  data: ["data engineer", "data scientist", "analytics engineer", "data platform"]
+  frontend: ["frontend", "front-end", "react", "ui engineer", "web engineer"]
+  backend: ["backend", "back-end", "platform engineer", "server engineer"]
+  fullstack: ["fullstack", "full-stack", "full stack"]
+  devops: ["devops", "sre", "site reliability", "infrastructure engineer"]
+  security: ["security engineer", "appsec", "infosec"]
+  swe: ["software engineer", "software developer", "swe"]
+
+seniority_tag:
+  intern: ["intern", "internship", "summer"]
+  new_grad: ["new grad", "new graduate", "university grad", "entry level", "fresher", "0-1 year"]
+  junior: ["junior", "associate", "1-3 years", "2 years"]
+  mid: ["mid-level", "mid level", "3-5 years", "4 years"]
+  senior: ["senior", "staff", "principal", "lead", "tech lead", "5+ years", "7+ years"]
+
+tech_tags:
+  python: ["python"]
+  cpp: ["c++", "cpp"]
+  rust: ["rust"]
+  go: ["golang"]
+  typescript: ["typescript"]
+  react: ["react"]
+  pytorch: ["pytorch"]
+  tensorflow: ["tensorflow"]
+  langchain: ["langchain"]
+  rag: ["rag", "retrieval augmented", "retrieval-augmented"]
+  llm: ["llm", "large language model"]
+  kubernetes: ["kubernetes", "k8s"]
+  aws: ["aws", "amazon web services"]
+  gcp: ["gcp", "google cloud"]
+  fastapi: ["fastapi"]
+  flask: ["flask"]

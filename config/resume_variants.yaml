@@ -1,0 +1,5 @@
+# Maps role buckets → which resume PDF to attach.
+# Populated by Saksham once resumes/ has PDFs.
+variants:
+  ai-ml: data/resumes/saksham_ai_ml.pdf
+  swe-startup: data/resumes/saksham_swe_startup.pdf

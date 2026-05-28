@@ -1,0 +1,6 @@
+# Populated in Plan 2 when careers-pages scraper lands.
+# Schema:
+# - name: Razorpay
+#   careers_url: https://razorpay.com/jobs
+#   adapter: razorpay   # matches a function in scrapers.careers_pages
+companies: []
