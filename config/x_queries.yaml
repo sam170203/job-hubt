@@ -1,0 +1,8 @@
+# X (Twitter) keyword searches. Each runs as a separate query.
+# Format: list of strings. Examples below — edit anytime.
+queries:
+  - "hiring ML India"
+  - "hiring AI engineer India"
+  - "hiring backend Bangalore"
+  - "we are hiring LLM"
+  - "hiring founding engineer India"
