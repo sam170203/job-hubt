@@ -1,4 +1,5 @@
 """SQLAlchemy ORM models. Schema per spec §6."""
+
 from __future__ import annotations
 
 from datetime import datetime

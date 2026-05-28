@@ -1,8 +1,10 @@
 """Verify models map to the schema in spec §6 and basic CRUD works."""
+
 from datetime import datetime
 
 import pytest
 from sqlalchemy import create_engine, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from job_hunt.models import (
@@ -47,13 +49,14 @@ def test_unique_source_external_id(session):
     j1 = Job(source="hn", external_id="x", company="A", title="t", url="u1", scraped_at=ts)
     j2 = Job(source="hn", external_id="x", company="B", title="t2", url="u2", scraped_at=ts)
     session.add_all([j1, j2])
-    with pytest.raises(Exception):
+    with pytest.raises(IntegrityError):
         session.commit()
 
 
 def test_application_event_relationship(session):
-    job = Job(source="hn", external_id="y", company="C", title="t", url="u",
-              scraped_at=datetime.utcnow())
+    job = Job(
+        source="hn", external_id="y", company="C", title="t", url="u", scraped_at=datetime.utcnow()
+    )
     session.add(job)
     session.flush()
 
@@ -92,8 +95,13 @@ def test_staging_raw_payload_roundtrip(session):
 
 def test_contact_and_gmail_message_exist(session):
     c = Contact(name="Founder X", company="Acme", x_handle="@x")
-    gm = GmailMessage(msg_id="abc", from_addr="r@acme.com", subject="hi",
-                      received_at=datetime.utcnow(), parsed_signal="noise")
+    gm = GmailMessage(
+        msg_id="abc",
+        from_addr="r@acme.com",
+        subject="hi",
+        received_at=datetime.utcnow(),
+        parsed_signal="noise",
+    )
     session.add_all([c, gm])
     session.commit()
     assert session.scalars(select(Contact)).one().name == "Founder X"

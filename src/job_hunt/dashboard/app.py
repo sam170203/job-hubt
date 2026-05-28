@@ -4,6 +4,7 @@ Run: `uv run streamlit run src/job_hunt/dashboard/app.py`
 
 The Pipeline, Analytics, and Today pages land in Plans 3 & 4.
 """
+
 from __future__ import annotations
 
 import streamlit as st

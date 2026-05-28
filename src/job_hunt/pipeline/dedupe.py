@@ -1,4 +1,5 @@
 """Decide whether a NormalizedJob is a duplicate of any existing Job row."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -19,11 +20,11 @@ class DedupeResult:
     existing_id: int | None
 
     @classmethod
-    def new(cls) -> "DedupeResult":
+    def new(cls) -> DedupeResult:
         return cls(False, None)
 
     @classmethod
-    def duplicate_of(cls, jid: int) -> "DedupeResult":
+    def duplicate_of(cls, jid: int) -> DedupeResult:
         return cls(True, jid)
 
 

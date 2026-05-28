@@ -4,7 +4,6 @@ from unittest.mock import patch
 
 from job_hunt.scrapers.hn_hiring import HNHiringScraper, parse_comment_to_raw
 
-
 FIXTURE = Path(__file__).parent / "fixtures" / "hn_hiring_sample.json"
 
 
@@ -34,8 +33,10 @@ def test_scraper_run_uses_fixture():
     class FakeResp:
         def __init__(self, data):
             self._data = data
+
         def json(self):
             return self._data
+
         def raise_for_status(self):
             pass
 

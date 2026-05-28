@@ -1,4 +1,5 @@
 """Project settings — paths, env loading. No business logic."""
+
 import os
 from functools import lru_cache
 from pathlib import Path

@@ -8,8 +8,14 @@ from job_hunt.pipeline.normalize import NormalizedJob
 
 def _norm(company="Acme", title="ML Engineer", url="https://acme.io/jobs", ext_id="x"):
     return NormalizedJob(
-        source="hn", external_id=ext_id, company=company, title=title, url=url,
-        jd_text=None, location=None, posted_at=None,
+        source="hn",
+        external_id=ext_id,
+        company=company,
+        title=title,
+        url=url,
+        jd_text=None,
+        location=None,
+        posted_at=None,
         scraped_at=datetime(2026, 5, 26),
     )
 
@@ -51,12 +57,18 @@ def test_fuzzy_company_title_match_is_duplicate(tmp_data_dir):
     db.reset_engine_for_testing()
     db.init_db()
     with db.session_scope() as s:
-        existing = _seed(s, company="Google Cloud",
-                         title="Backend Engineer", url="https://other.url")
+        existing = _seed(
+            s, company="Google Cloud", title="Backend Engineer", url="https://other.url"
+        )
         existing_id = existing.id
-        result = find_duplicate(s, _norm(company="Google Cloud",
-                                         title="Backend Software Engineer",
-                                         url="https://different.url"))
+        result = find_duplicate(
+            s,
+            _norm(
+                company="Google Cloud",
+                title="Backend Software Engineer",
+                url="https://different.url",
+            ),
+        )
     assert result.is_duplicate
     assert result.existing_id == existing_id
 
@@ -66,7 +78,7 @@ def test_different_company_is_new(tmp_data_dir):
     db.init_db()
     with db.session_scope() as s:
         _seed(s, company="Acme", title="ML", url="https://a.com")
-        result = find_duplicate(s, _norm(company="Zenith Labs",
-                                         title="Backend Engineer",
-                                         url="https://z.com"))
+        result = find_duplicate(
+            s, _norm(company="Zenith Labs", title="Backend Engineer", url="https://z.com")
+        )
     assert not result.is_duplicate

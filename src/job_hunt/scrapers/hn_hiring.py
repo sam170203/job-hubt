@@ -8,6 +8,7 @@ Strategy:
 Per-comment parsing into structured (company/title/location/url) happens in
 pipeline.normalize, NOT here. This scraper just hands raw text downstream.
 """
+
 from __future__ import annotations
 
 import httpx

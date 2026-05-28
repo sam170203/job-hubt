@@ -11,8 +11,13 @@ def test_pipeline_promotes_new_job(tmp_data_dir):
     db.init_db()
 
     write_to_staging(
-        [RawJob("hn", "100",
-                {"text": "Acme | ML Engineer | Remote | <a href='https://acme.io/j'>apply</a>"})],
+        [
+            RawJob(
+                "hn",
+                "100",
+                {"text": "Acme | ML Engineer | Remote | <a href='https://acme.io/j'>apply</a>"},
+            )
+        ],
         scraped_at=datetime(2026, 5, 26),
     )
 
@@ -34,13 +39,25 @@ def test_pipeline_skips_duplicates(tmp_data_dir):
     db.init_db()
 
     with db.session_scope() as s:
-        s.add(Job(source="hn", external_id="seed", company="Acme",
-                  title="ML Engineer", url="https://acme.io/j",
-                  scraped_at=datetime(2026, 5, 25)))
+        s.add(
+            Job(
+                source="hn",
+                external_id="seed",
+                company="Acme",
+                title="ML Engineer",
+                url="https://acme.io/j",
+                scraped_at=datetime(2026, 5, 25),
+            )
+        )
 
     write_to_staging(
-        [RawJob("hn", "200",
-                {"text": "Acme | ML Engineer | Remote | <a href='https://acme.io/j'>apply</a>"})],
+        [
+            RawJob(
+                "hn",
+                "200",
+                {"text": "Acme | ML Engineer | Remote | <a href='https://acme.io/j'>apply</a>"},
+            )
+        ],
         scraped_at=datetime(2026, 5, 26),
     )
 

@@ -1,4 +1,5 @@
 """Rule-based enrichment: assign role_tag, seniority_tag, tech_tags from keywords.yaml."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field

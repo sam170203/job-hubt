@@ -2,6 +2,7 @@
 
 Keeping these out of app.py means we can unit-test them without spinning up Streamlit.
 """
+
 from __future__ import annotations
 
 from datetime import datetime, timedelta
@@ -12,8 +13,15 @@ from job_hunt.db import session_scope
 from job_hunt.models import Job
 
 VALID_STATUSES = {
-    "new", "shortlisted", "applied", "replied",
-    "rejected", "ghosted", "interviewing", "offer", "skipped",
+    "new",
+    "shortlisted",
+    "applied",
+    "replied",
+    "rejected",
+    "ghosted",
+    "interviewing",
+    "offer",
+    "skipped",
 }
 
 

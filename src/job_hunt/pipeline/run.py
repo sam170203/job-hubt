@@ -1,9 +1,10 @@
 """Pipeline orchestrator: promote unpromoted staging rows into the `jobs` table."""
+
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable
 
 from sqlalchemy import select
 
@@ -31,15 +32,12 @@ class PipelineStats:
 def run_pipeline() -> PipelineStats:
     stats = PipelineStats()
     with session_scope() as s:
-        staging_rows = s.scalars(
-            select(StagingRaw).where(StagingRaw.promoted.is_(False))
-        ).all()
+        staging_rows = s.scalars(select(StagingRaw).where(StagingRaw.promoted.is_(False))).all()
 
         for sr in staging_rows:
             normalizer = NORMALIZERS.get(sr.source)
             if normalizer is None:
-                log.warning("No normalizer for source=%s; skipping staging.id=%s",
-                            sr.source, sr.id)
+                log.warning("No normalizer for source=%s; skipping staging.id=%s", sr.source, sr.id)
                 stats.skipped_unknown_source += 1
                 continue
 

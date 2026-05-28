@@ -3,6 +3,7 @@
 Scrapers produce RawJob rows and call write_to_staging. They never touch
 the `jobs` table directly — the pipeline owns that.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
