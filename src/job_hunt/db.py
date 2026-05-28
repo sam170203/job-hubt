@@ -7,6 +7,7 @@ from sqlalchemy import create_engine, event
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
+from job_hunt.db_migrate import run_migrations
 from job_hunt.models import Base
 from job_hunt.settings import get_data_dir, get_db_path
 
@@ -39,9 +40,10 @@ def get_engine() -> Engine:
 
 
 def init_db() -> None:
-    """Create all tables. Idempotent."""
+    """Create all tables and run additive migrations. Idempotent."""
     engine = get_engine()
     Base.metadata.create_all(engine)
+    run_migrations(engine)
 
 
 @contextmanager

@@ -41,6 +41,12 @@ class Job(Base):
     tech_tags: Mapped[list[str] | None] = mapped_column(JSON)
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="new")
     notes: Mapped[str | None] = mapped_column(Text)
+    work_mode: Mapped[str | None] = mapped_column(String(16))
+    country: Mapped[str | None] = mapped_column(String(64))
+    india_state: Mapped[str | None] = mapped_column(String(64))
+    company_tier: Mapped[str | None] = mapped_column(String(16))
+    match_score: Mapped[float | None] = mapped_column()
+    hidden: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     applications: Mapped[list[Application]] = relationship(back_populates="job")
 
@@ -107,3 +113,28 @@ class StagingRaw(Base):
     payload: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False)
     scraped_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     promoted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
+
+class CompanyBlocklist(Base):
+    __tablename__ = "company_blocklist"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    company_name: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
+    reason: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
+
+class SavedView(Base):
+    __tablename__ = "saved_views"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
+    filters_json: Mapped[dict] = mapped_column(JSON, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
+
+class SchemaMigration(Base):
+    __tablename__ = "schema_migrations"
+
+    version: Mapped[int] = mapped_column(Integer, primary_key=True)
+    applied_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
