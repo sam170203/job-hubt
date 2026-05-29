@@ -8,6 +8,7 @@ Strategy:
 
 This is intentionally best-effort. The system functions without Wellfound data.
 """
+
 from __future__ import annotations
 
 import gzip
@@ -15,7 +16,6 @@ import json
 import logging
 import re
 import time
-from io import BytesIO
 from typing import Any
 
 import httpx
@@ -76,7 +76,7 @@ def fetch_sitemap_urls(sitemap_url: str = SITEMAP_INDEX, limit: int = JOB_FETCH_
 
     # If this is a sitemap index (entries point to other sitemap.xml files),
     # follow the first one that mentions "jobs".
-    if any(l.endswith(".xml") or l.endswith(".xml.gz") for l in locs):
+    if any(loc.endswith(".xml") or loc.endswith(".xml.gz") for loc in locs):
         for child in locs:
             if "job" in child.lower():
                 sub = _http_get(child)

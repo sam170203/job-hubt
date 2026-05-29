@@ -4,6 +4,7 @@ Reads config/target_companies.yaml, hits each company's ATS public endpoint,
 emits one RawJob per job posting. NO auth required — these endpoints are
 intentionally public for boards-embed use.
 """
+
 from __future__ import annotations
 
 import logging

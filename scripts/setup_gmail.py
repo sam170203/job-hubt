@@ -12,6 +12,7 @@ Steps for the user (documented in README):
 
 Re-run only if you revoke access or want to re-auth.
 """
+
 from __future__ import annotations
 
 import os
@@ -31,8 +32,11 @@ TOKEN_PATH = get_data_dir() / ".gmail_token.json"
 def main() -> int:
     client_secrets = os.environ.get("GMAIL_CLIENT_SECRETS_PATH", "").strip()
     if not client_secrets:
-        print("ERROR: Set GMAIL_CLIENT_SECRETS_PATH in .env to your "
-              "downloaded client_secret_*.json path.", file=sys.stderr)
+        print(
+            "ERROR: Set GMAIL_CLIENT_SECRETS_PATH in .env to your "
+            "downloaded client_secret_*.json path.",
+            file=sys.stderr,
+        )
         return 1
     if not Path(client_secrets).exists():
         print(f"ERROR: {client_secrets} does not exist.", file=sys.stderr)

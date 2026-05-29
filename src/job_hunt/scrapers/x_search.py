@@ -6,6 +6,7 @@ come and go; if they're all down, this scraper returns [] (graceful degrade).
 
 Configure queries in config/x_queries.yaml. The user can add/remove anytime.
 """
+
 from __future__ import annotations
 
 import logging
@@ -84,15 +85,20 @@ def parse_nitter_search(html: str, query: str) -> list[dict[str, str]]:
         m = re.search(r"/status/(\d+)", url_path)
         if not m:
             continue
-        out.append({
-            "id": m.group(1),
-            "url": "https://twitter.com" + url_path.split("#")[0],
-            "text": content_node.text(strip=True) if content_node else "",
-            "author": user_node.text(strip=True) if user_node else "",
-            "date": (date_node.attributes.get("title")
-                     if date_node is not None and date_node.attributes else None),
-            "query": query,
-        })
+        out.append(
+            {
+                "id": m.group(1),
+                "url": "https://twitter.com" + url_path.split("#")[0],
+                "text": content_node.text(strip=True) if content_node else "",
+                "author": user_node.text(strip=True) if user_node else "",
+                "date": (
+                    date_node.attributes.get("title")
+                    if date_node is not None and date_node.attributes
+                    else None
+                ),
+                "query": query,
+            }
+        )
         if len(out) >= MAX_TWEETS_PER_QUERY:
             break
     return out

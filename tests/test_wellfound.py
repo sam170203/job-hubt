@@ -7,21 +7,20 @@ from job_hunt.scrapers.wellfound import (
     parse_job_page,
 )
 
-
-SAMPLE_SITEMAP_INDEX = """<?xml version="1.0"?>
+SAMPLE_SITEMAP_INDEX = b"""<?xml version="1.0"?>
 <sitemapindex>
   <sitemap><loc>https://wellfound.com/sitemap/jobs/jobs1.xml</loc></sitemap>
   <sitemap><loc>https://wellfound.com/sitemap/companies/c1.xml</loc></sitemap>
 </sitemapindex>
-""".encode()
+"""
 
-SAMPLE_JOBS_SITEMAP = """<?xml version="1.0"?>
+SAMPLE_JOBS_SITEMAP = b"""<?xml version="1.0"?>
 <urlset>
   <url><loc>https://wellfound.com/jobs/123-ml-engineer</loc></url>
   <url><loc>https://wellfound.com/jobs/456-backend</loc></url>
   <url><loc>https://wellfound.com/companies/acme</loc></url>
 </urlset>
-""".encode()
+"""
 
 
 SAMPLE_JOB_HTML = """
@@ -84,6 +83,7 @@ def test_fetch_sitemap_urls_follows_index():
 def test_fetch_sitemap_urls_empty_on_http_error():
     def boom(*a, **kw):
         raise Exception("blocked")
+
     with patch("job_hunt.scrapers.wellfound.httpx.get", side_effect=boom):
         assert fetch_sitemap_urls() == []
 
@@ -98,8 +98,10 @@ def test_scraper_run_with_mocks():
             return FakeResp(SAMPLE_JOB_HTML.encode(), text=SAMPLE_JOB_HTML)
         return FakeResp(b"")
 
-    with patch("job_hunt.scrapers.wellfound.httpx.get", side_effect=fake_get), \
-         patch("job_hunt.scrapers.wellfound.time.sleep", lambda *_: None):
+    with (
+        patch("job_hunt.scrapers.wellfound.httpx.get", side_effect=fake_get),
+        patch("job_hunt.scrapers.wellfound.time.sleep", lambda *_: None),
+    ):
         rows = WellfoundScraper().run()
 
     assert len(rows) == 2  # 2 job urls in the sample sitemap

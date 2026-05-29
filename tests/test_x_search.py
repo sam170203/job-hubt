@@ -1,11 +1,8 @@
-from unittest.mock import patch
-
 from job_hunt.scrapers.x_search import (
     XSearchScraper,
     parse_nitter_search,
     tweet_to_raw,
 )
-
 
 SAMPLE_NITTER_HTML = """
 <html><body>
@@ -38,8 +35,9 @@ def test_parse_nitter_search_extracts_tweets():
 
 
 def test_tweet_to_raw():
-    raw = tweet_to_raw({"id": "111", "url": "u", "text": "t",
-                        "author": "a", "date": None, "query": "q"})
+    raw = tweet_to_raw(
+        {"id": "111", "url": "u", "text": "t", "author": "a", "date": None, "query": "q"}
+    )
     assert raw.source == "x"
     assert raw.external_id == "111"
 
@@ -58,10 +56,10 @@ def test_scraper_returns_empty_when_no_instance(monkeypatch):
 
 
 def test_scraper_happy_path(monkeypatch):
-    monkeypatch.setattr("job_hunt.scrapers.x_search._load_queries",
-                        lambda: ["hiring ML India"])
-    monkeypatch.setattr("job_hunt.scrapers.x_search._pick_live_instance",
-                        lambda: "https://nitter.test")
+    monkeypatch.setattr("job_hunt.scrapers.x_search._load_queries", lambda: ["hiring ML India"])
+    monkeypatch.setattr(
+        "job_hunt.scrapers.x_search._pick_live_instance", lambda: "https://nitter.test"
+    )
     monkeypatch.setattr("job_hunt.scrapers.x_search.time.sleep", lambda *_: None)
 
     class FakeResp:

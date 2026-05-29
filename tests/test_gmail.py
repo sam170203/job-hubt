@@ -14,8 +14,10 @@ def _b64(s: str) -> str:
 
 
 def test_classify_recruiter():
-    assert classify("recruiter@acme.com", "Quick chat?", "We have a role for you.") \
+    assert (
+        classify("recruiter@acme.com", "Quick chat?", "We have a role for you.")
         == "recruiter_outreach"
+    )
 
 
 def test_classify_job_alert_by_domain():
@@ -27,8 +29,10 @@ def test_classify_interview():
 
 
 def test_classify_rejection():
-    assert classify("a@b.com", "Application update",
-                    "Unfortunately we will not be moving forward.") == "rejection"
+    assert (
+        classify("a@b.com", "Application update", "Unfortunately we will not be moving forward.")
+        == "rejection"
+    )
 
 
 def test_classify_noise():
@@ -103,7 +107,10 @@ def test_scraper_returns_empty_when_no_token(tmp_path, monkeypatch):
 def test_scraper_with_mocked_service():
     # Mock _build_service to return a fake Gmail service whose list/get return canned data
     fake = MagicMock()
-    fake.users().messages().list().execute.return_value = {"messages": [{"id": "m1"}], "nextPageToken": None}
+    fake.users().messages().list().execute.return_value = {
+        "messages": [{"id": "m1"}],
+        "nextPageToken": None,
+    }
     fake.users().messages().get().execute.return_value = {
         "id": "m1",
         "payload": {

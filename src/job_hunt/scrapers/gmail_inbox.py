@@ -13,6 +13,7 @@ For 'recruiter_outreach' AND 'job_alert', emits RawJobs (source='gmail').
 
 NOTE: requires OAuth setup. Run scripts/setup_gmail.py first.
 """
+
 from __future__ import annotations
 
 import base64
@@ -36,20 +37,30 @@ LOOKBACK_DAYS = 7
 MAX_MESSAGES = 200
 
 RECRUITER_DOMAINS = (
-    "linkedin.com", "wellfound.com", "lever.co", "greenhouse.io",
-    "ashbyhq.com", "workable.com", "smartrecruiters.com",
+    "linkedin.com",
+    "wellfound.com",
+    "lever.co",
+    "greenhouse.io",
+    "ashbyhq.com",
+    "workable.com",
+    "smartrecruiters.com",
 )
 RECRUITER_HEADER_HINTS = ("recruiter", "talent", "people", "hiring")
 ALERT_SUBJECT_HINTS = ("jobs for you", "new jobs", "your job alert", "matches you", "jobs alert")
 INTERVIEW_HINTS = ("interview", "schedule a chat", "schedule a call")
-REJECT_HINTS = ("not moving forward", "regret to inform", "we decided to move ahead",
-                "we will not be moving", "filled the position", "unfortunately")
+REJECT_HINTS = (
+    "not moving forward",
+    "regret to inform",
+    "we decided to move ahead",
+    "we will not be moving",
+    "filled the position",
+    "unfortunately",
+)
 
 
 def _load_credentials() -> Credentials | None:
     if not TOKEN_PATH.exists():
-        log.warning("Gmail token not found at %s — run scripts/setup_gmail.py first.",
-                    TOKEN_PATH)
+        log.warning("Gmail token not found at %s — run scripts/setup_gmail.py first.", TOKEN_PATH)
         return None
     return Credentials.from_authorized_user_file(str(TOKEN_PATH), SCOPES)
 
@@ -185,9 +196,7 @@ class GmailInboxScraper:
 
     def _get_message(self, service, msg_id: str) -> dict | None:
         try:
-            return service.users().messages().get(
-                userId="me", id=msg_id, format="full"
-            ).execute()
+            return service.users().messages().get(userId="me", id=msg_id, format="full").execute()
         except Exception as e:
             log.warning("Gmail get failed for msg=%s: %s", msg_id, e)
             return None

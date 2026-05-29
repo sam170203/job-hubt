@@ -1,10 +1,10 @@
 """Tests for the careers_pages scraper (Greenhouse + Lever ATS adapters)."""
+
 from __future__ import annotations
 
 from unittest.mock import MagicMock, patch
 
-import pytest
-
+from job_hunt.scrapers.base import RawJob
 from job_hunt.scrapers.careers_pages import (
     CareersPagesScraper,
     fetch_greenhouse,
@@ -12,8 +12,6 @@ from job_hunt.scrapers.careers_pages import (
     gh_job_to_raw,
     lever_posting_to_raw,
 )
-from job_hunt.scrapers.base import RawJob
-
 
 # ---------------------------------------------------------------------------
 # Unit tests for conversion helpers
