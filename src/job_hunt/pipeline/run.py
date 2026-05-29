@@ -19,13 +19,26 @@ from job_hunt.pipeline.enrich import (
     extract_country_and_state,
     load_my_skills,
 )
-from job_hunt.pipeline.normalize import NormalizedJob, normalize_hn_payload
+from job_hunt.pipeline.normalize import (
+    NormalizedJob,
+    normalize_gmail_payload,
+    normalize_greenhouse_payload,
+    normalize_hn_payload,
+    normalize_lever_payload,
+    normalize_wellfound_payload,
+    normalize_x_payload,
+)
 
 log = logging.getLogger(__name__)
 
 # Add new sources here as they're built (Plan 2).
 NORMALIZERS: dict[str, Callable[..., NormalizedJob]] = {
     "hn": normalize_hn_payload,
+    "greenhouse": normalize_greenhouse_payload,
+    "lever": normalize_lever_payload,
+    "wellfound": normalize_wellfound_payload,
+    "x": normalize_x_payload,
+    "gmail": normalize_gmail_payload,
 }
 
 
